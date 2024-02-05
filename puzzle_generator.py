@@ -2,12 +2,14 @@
 # Student ID: sc21rh
 # Student Name: Robert Helps
 
+import math
 import numpy
 import random
 
 # Print the current grid
 def print_grid(grid):
-    print(grid)
+    for i in range(len(grid)):
+        print(grid[i])
 
 
 # Generate an empty grid
@@ -21,10 +23,10 @@ def Generate_puzzle():
     
     # fill the grid with values 
     Solve_puzzle(grid)
-    #print_grid(grid)
+    print_grid(grid)
     # Remove squares to create a valid puzzle
 
-    return 1
+    return grid
 
 # Solve the puzzle recursively
 # Takes parameter grid (current grid)
@@ -36,17 +38,15 @@ def Solve_puzzle(grid):
                 # Try to fill the cell with a number
 
                 # Create list of numbers and randomly choice an index until one works
-                for number in range (1,10):
-
-                    #number = random.randint(1,9)
-                    #print(number)
+                numbers = random.sample(range(1, 10), 9)
+                for number in numbers:
                     
                     # Check row, column and grid to make sure number can be there
-                    if(Check_row(grid, row, number) == False or Check_column(grid, column, number) == False 
-                    or Check_square(grid, row, column, number) == False):
+                    if(Check_row(grid, row, number) and Check_column(grid, column, number) 
+                    and Check_square(grid, row, column, number) ):
                         
                         grid[row][column] = number
-                        print_grid(grid)
+                        #print_grid(grid)
                         #recursively attempt to fill the rest of the grid
                         if(Solve_puzzle(grid)):
                             return True
@@ -69,13 +69,11 @@ def Create_holes():
 def Check_row(grid, row, number):
     #Check grid[row] to see if number is in it
     for i in range(9):
-        print("twst")
         if grid[row][i] == number:
-            print("here")
-            return True
+            return False
 
-    #return false if not in the row
-    return False
+    #return true if not in the row
+    return True
 
 # Check if the number is in the column
 # Takes parameters: grid, column and number
@@ -83,27 +81,25 @@ def Check_column(grid, column, number):
     #Check grid[][column] to see if number is in it
     for i in range(9):
         if grid[i][column] == number:
-            return True
-        
-    #return false if not in the column
-    return False
+            return False
+
+    #return true if not in the column
+    return True
 
 # Check if number is in the 3x3 square
 # Takes parameters: grid, row, column and number
 def Check_square(grid, row, column, number):
     # Get current square
-    current_row = row%3 
-    current_column = column%3 
-    for i in range(3):
-        for j in range(3):
-            
-            if grid[current_row+i][current_column+j] == number:
-                return True
-            
-    # check if number is in that square
+    current_row = 3 * math.floor(row / 3)
+    current_column = 3 * math.floor(column / 3)
+    # Search square for number
+    for i in range(current_row, current_row + 3):
+        for j in range(current_column, current_column + 3):
+            if grid[i][j] == number:
+                return False
+    #return true if not in the square
+    return True
 
-    #return false if not in the square
-    return False
 
 if __name__ == "__main__":
     Generate_puzzle()
