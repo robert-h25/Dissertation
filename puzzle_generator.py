@@ -10,7 +10,7 @@ import random
 def print_grid(grid):
     for i in range(len(grid)):
         print(grid[i])
-
+    print("\n")
 
 # Generate an empty grid
 def Generate_puzzle():
@@ -25,7 +25,8 @@ def Generate_puzzle():
     Solve_puzzle(grid)
     print_grid(grid)
     # Remove squares to create a valid puzzle
-
+    grid = Create_holes(grid)
+    print_grid(grid)
     return grid
 
 # Solve the puzzle recursively
@@ -59,10 +60,25 @@ def Solve_puzzle(grid):
     return True
 
 # Remove certain cells to create a vaid puzzle
-def Create_holes():
+def Create_holes(grid):
     # check if we can take the cells recursively to create an unique solution
+    
+    # Create puzzle with between 17 and 40 numbers left
+    lower_bound = 17
+    upper_bound = 40
+    target_holes = random.randint(lower_bound,upper_bound)
+    holes = 0
+    while 81-holes > target_holes:
+        #remove number from random row, column
+        row = random.randint(0,8)
+        column = random.randint(0,8)
+        grid[row][column] = 0
+        print(holes)
+        holes = holes + 1
+        #check we have unique solution
+        
 
-    return 1
+    return grid
 
 # Check if the number is in the row
 # Takes parameters: grid, row and number
