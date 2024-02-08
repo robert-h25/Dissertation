@@ -2,6 +2,7 @@
 # Student ID: sc21rh
 # Student Name: Robert Helps
 
+from copy import deepcopy
 import math
 import numpy
 import random
@@ -60,13 +61,14 @@ def Solve_puzzle(grid):
     return True
 
 # Remove certain cells to create a vaid puzzle
+# Takes Parameter: Grid
 def Create_holes(grid):
-    # check if we can take the cells recursively to create an unique solution
-    
+
     # Create puzzle with between 17 and 40 numbers left
     lower_bound = 17
     upper_bound = 40
     target_holes = random.randint(lower_bound,upper_bound)
+    print(target_holes)
     holes = []
     while 81-len(holes) > target_holes:
         #remove number from random row, column
@@ -74,13 +76,25 @@ def Create_holes(grid):
         column = random.randint(0,8)
         # Check the hole is new
         if (row, column) not in holes:
+            number = grid[row][column]
             grid[row][column] = 0
-            holes.append((row,column))
-            print(len(holes))
             #check we have unique solution
-        
+            if not has_unique_solution(grid):
+                # Add cell back to grid
+                grid[row][column] = number
+            else:
+                # Add to holes list
+                holes.append((row, column))
 
     return grid
+
+# Checks if we have a unique solution
+# Takes Parameter: Grid
+def has_unique_solution(grid):
+    # Use a copy of the grid
+    solutions = Solve_puzzle(deepcopy(grid))
+    # Only returns true if we have a unique solution
+    return solutions == True
 
 # Check if the number is in the row
 # Takes parameters: grid, row and number
