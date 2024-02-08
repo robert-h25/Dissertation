@@ -67,15 +67,17 @@ def Create_holes(grid):
     lower_bound = 17
     upper_bound = 40
     target_holes = random.randint(lower_bound,upper_bound)
-    holes = 0
-    while 81-holes > target_holes:
+    holes = []
+    while 81-len(holes) > target_holes:
         #remove number from random row, column
         row = random.randint(0,8)
         column = random.randint(0,8)
-        grid[row][column] = 0
-        print(holes)
-        holes = holes + 1
-        #check we have unique solution
+        # Check the hole is new
+        if (row, column) not in holes:
+            grid[row][column] = 0
+            holes.append((row,column))
+            print(len(holes))
+            #check we have unique solution
         
 
     return grid
