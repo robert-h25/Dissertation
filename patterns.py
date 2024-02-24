@@ -33,32 +33,40 @@ def unique_candidate(grid):
         for j in range(9):
             if grid[i][j] == 0:
                 # search through every number
-                for x in range(1,10):
-                    # List of numbers that could go in that cell
-                    numbers = []
+                for x in range(1,10):                  
                     # Check number in that row,grid,block
                     if(Check_row(grid, i, x) and
                        Check_column(grid, j, x) and
                        Check_square(grid, i, j, x)):
-                        # Check all other rows and column in that block if a number could go there
-                        current_row = 3 * math.floor(i / 3)
-                        current_column = 3 * math.floor(j / 3)
-                        for a in range(current_row,current_row+3):
-                            # number in that blocks row
-                            if(x in grid[a]):
-                                numbers.append(x)
-                        for b in range(current_column,current_column+3):
-                            for row in range(9):
-                                # number in that blocks column
-                                if grid[row][b] == x:     
-                                    numbers.append(x)
-                # if we have a unique candidate
-                if len(numbers) == 1:
-                    print("Unique candidate found at position ({}, {}): {}".format(i, j, x))
-
-                        
+                        # check if the number is unique in its block
+                        if check_block_row_columns(grid, i, j, x):
+                            print("Unique candidate found at position ({}, {}): {}".format(i, j, x))
 
     return False
+
+# Check if the number is unique in its row and block columns
+def check_block_row_columns(grid, row, col, x):
+    current_row = 3 * math.floor(row / 3)
+    current_column = 3 * math.floor(col / 3)
+    for i in range(current_row, current_row + 3):
+        for j in range(current_column, current_column + 3):
+            # not checking current row/column
+            if (i != row or j != col) and grid[i][j] == 0:
+                # check possible candidates x
+                if x in get_possible_numbers(grid, i, j):
+                    return False
+    return True
+
+# Function to get the possible numbers we could have in the row and columns
+def get_possible_numbers(grid, row, col):
+    numbers = list(range(1, 10))
+    for i in range(9):
+        if grid[row][i] in numbers:
+            numbers.remove(grid[row][i])  # Remove numbers in the same row
+        if grid[i][col] in numbers:
+            numbers.remove(grid[i][col])  # Remove numbers in the same column
+    # return list of possible numbers
+    return numbers
 
 def BRC_interaction(grid):
     return False
