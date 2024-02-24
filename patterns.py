@@ -62,14 +62,43 @@ def get_possible_numbers(grid, row, col):
     numbers = list(range(1, 10))
     for i in range(9):
         if grid[row][i] in numbers:
-            numbers.remove(grid[row][i])  # Remove numbers in the same row
+            # remove numbers in that row
+            numbers.remove(grid[row][i])  
         if grid[i][col] in numbers:
-            numbers.remove(grid[i][col])  # Remove numbers in the same column
+            #remove numbers in that column
+            numbers.remove(grid[i][col])  
     # return list of possible numbers
     return numbers
 
+# Function to find a number within a specific row or column
 def BRC_interaction(grid):
+    # Check each number
+    for number in range(1,10):
+        # iterate over each block
+        for i in range(3):
+            for j in range(3):
+                # list of amount of a certain number
+                row = []
+                column = []
+                # iterate over cells in the block
+                for a in range(3):
+                    for b in range(3):
+                        # get current row and column
+                        current_row = i * 3 + a
+                        current_col = j * 3 + b
+                        # Check if the cell is empty and if the number can be placed in it
+                        if grid[current_row][current_col] == 0 and number in get_possible_numbers(grid, current_row, current_col):
+                            row.append(current_row)
+                            column.append(current_col)
+                # Check if we have 1 instance of that number in the column/row
+                if len(row) == 1:
+                    print(f"Number {number} is unique in row {row.pop()} within block ({i}, {j})")
+                if len(column) == 1:
+                    print(f"Number {number} is unique in column {column.pop()} within  block ({i}, {j})")
+        
+                
     return False
+
 
 def block_block_interaction(grid):
     return False
