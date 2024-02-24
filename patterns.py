@@ -1,7 +1,9 @@
 from puzzle_generator import *
+import math
 
 # Functions which find certain patterns in a Sudoku puzzle
 
+# Find a sole candidate
 def sole_technique(grid):
     # Search each cell in the grid
     for i in range(9):
@@ -24,7 +26,38 @@ def sole_technique(grid):
             
     return False
 
+# Find unique candidates
 def unique_candidate(grid):
+    # search grid for an empty cell
+    for i in range(9):
+        for j in range(9):
+            if grid[i][j] == 0:
+                # search through every number
+                for x in range(1,10):
+                    # List of numbers that could go in that cell
+                    numbers = []
+                    # Check number in that row,grid,block
+                    if(Check_row(grid, i, x) and
+                       Check_column(grid, j, x) and
+                       Check_square(grid, i, j, x)):
+                        # Check all other rows and column in that block if a number could go there
+                        current_row = 3 * math.floor(i / 3)
+                        current_column = 3 * math.floor(j / 3)
+                        for a in range(current_row,current_row+3):
+                            # number in that blocks row
+                            if(x in grid[a]):
+                                numbers.append(x)
+                        for b in range(current_column,current_column+3):
+                            for row in range(9):
+                                # number in that blocks column
+                                if grid[row][b] == x:     
+                                    numbers.append(x)
+                # if we have a unique candidate
+                if len(numbers) == 1:
+                    print("Unique candidate found at position ({}, {}): {}".format(i, j, x))
+
+                        
+
     return False
 
 def BRC_interaction(grid):
