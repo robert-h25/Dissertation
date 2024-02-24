@@ -132,6 +132,6 @@ def Check_square(grid, row, column, number):
     #return true if not in the square
     return True
 
-
+"""
 if __name__ == "__main__":
-    Generate_puzzle()
+    Generate_puzzle()"""
