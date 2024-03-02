@@ -133,7 +133,6 @@ def block_block_interaction(grid):
 def get_candidates(grid):
     #create an empty 9x9 grid
     candidates = [[[]for _ in range(9)]for _ in range(9)]
-    cells = {}
     # scan grid for empty cells
     for row in range(9):
         for column in range(9):
@@ -146,12 +145,49 @@ def get_candidates(grid):
                     Check_square(grid, row, column, i)):
                         numbers.append(i)
                 candidates[row][column] = numbers
-                print(row,column,candidates[row][column])
-    return
+            #print(row,column,candidates[row][column])
+                
+    return candidates
 
 def naked_subset(grid):
-    get_candidates(grid)
-    return False
+    # set naked subset list
+    naked_subset = []
+    # get candidate numbers for each cell
+    candidates = get_candidates(grid)
+    for i in range(9):
+        for j in range(9):
+            if len(candidates[i][j]):    
+                count= 0
+                subset = []
+                # check row
+                for a in range(9):
+                    # if we have the same candidate subset
+                    if candidates[i][j] == candidates[a][j] and i != a:
+                        count +=1
+                        subset.append(candidates[a][j])
+
+                #check column
+                for a in range(9):
+                    # if we have the same candidate subset
+                    if candidates[i][j] == candidates[i][a] and i != a:
+                        count +=1
+                        subset.append(candidates[i][a])
+
+                #check block
+                current_row = 3 * math.floor(i / 3)
+                current_column = 3 * math.floor(j / 3)
+                for a in range(current_row, current_row + 3):
+                    for b in range(current_column, current_column + 3):
+                        # if we have the same candidate subset
+                        if candidates[i][j] == candidates[a][b] and i != a and j!=b:
+                            count+=1
+                            subset.append(candidates[a][b])
+                                               
+                # naked subset when we have same candidates 
+                if (count > 1 and len(candidates[i][j]) == count):
+                    naked_subset.append(subset)
+
+    return naked_subset
 
 def hidden_subset(grid):
     return False
