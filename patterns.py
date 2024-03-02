@@ -116,7 +116,7 @@ def block_block_interaction(grid):
                         row = row_block*3+i
                         column = col_block*3+j
                         # if grid is empty and we are the middle and middle left blocks
-                        if grid[row][column] == 0 and ((row//3,column//3)==(1,0) or (row//3,column//3)==(1,1)):
+                        if grid[row][column] == 0 and ((math.floor(row / 3),math.floor(column / 3))==(1,0) or (math.floor(row / 3),math.floor(column / 3))==(1,1)):
                             # if number exists in that column
                             if number in [grid[a][column] for a in range(3)]:
                                 # add possible number and cell to elimate
