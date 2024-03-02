@@ -101,6 +101,31 @@ def BRC_interaction(grid):
 
 
 def block_block_interaction(grid):
+    # Looping through each block
+    for row_block in range(3):
+        for col_block in range(3):
+            # iterate over all the numbers
+            for number in range (1,10):
+                # setting count per cell and elimated cells as empty
+                possible_numbers = 0
+                elimated_cells = []
+                #iterate over each cell in the block
+                for i in range(3):
+                    for j in range(3):
+                        # get current row and column
+                        row = row_block*3+i
+                        column = col_block*3+j
+                        # if grid is empty and we are the middle and middle left blocks
+                        if grid[row][column] == 0 and ((row//3,column//3)==(1,0) or (row//3,column//3)==(1,1)):
+                            # if number exists in that column
+                            if number in [grid[a][column] for a in range(3)]:
+                                # add possible number and cell to elimate
+                                possible_numbers+=1
+                                elimated_cells.append((row,column))
+                # if we have a number to eliminate from a set of cells
+                if possible_numbers >0:
+                    print("Elimate",number,"from cells:",elimated_cells)
+
     return False
 
 def naked_subset(grid):
