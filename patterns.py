@@ -128,7 +128,29 @@ def block_block_interaction(grid):
 
     return False
 
+
+
+def get_candidates(grid):
+    #create an empty 9x9 grid
+    candidates = [[[]for _ in range(9)]for _ in range(9)]
+    cells = {}
+    # scan grid for empty cells
+    for row in range(9):
+        for column in range(9):
+            if grid[row][column] == 0:
+                # get candidates from row, column and block
+                numbers = []
+                for i in range(1,10):
+                    if(Check_row(grid,row,i) and
+                    Check_column(grid,column,i) and
+                    Check_square(grid, row, column, i)):
+                        numbers.append(i)
+                candidates[row][column] = numbers
+                print(row,column,candidates[row][column])
+    return
+
 def naked_subset(grid):
+    get_candidates(grid)
     return False
 
 def hidden_subset(grid):
