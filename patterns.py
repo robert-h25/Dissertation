@@ -191,8 +191,89 @@ def naked_subset(grid):
 
 def hidden_subset(grid):
     return False
+# Function to check if a number appears twice in a row
+def twice_in_row(candidates,row,number):
+    count = 0
+    for column in range(9):
+        if number in candidates[row][column]:
+            count += 1
+            if count > 2:
+                return False
+    return count == 2
+
+# Function to check if a number appears twice in a column
+def twice_in_column(candidates,column,number):
+    count = 0
+    for row in range(9):
+        if number in candidates[row][column]:
+            count += 1
+            if count > 2:
+                return False
+    return count == 2
+
+#Function to check a set of coordinates to see if we can make a rectangle
+def check_rectangle(coordinates):
+    x_wings = []
+    # loop through all 4 possible combination of coords
+    for i in range(len(coordinates)):
+            for j in range(i+1, len(coordinates)):
+                for k in range(j+1, len(coordinates)):
+                    for l in range(k+1, len(coordinates)):
+                        # get first 2 values of the coordinate tuple
+                        x_values = []
+                        y_values = []
+                        # ignore 3rd value
+                        subset = [coordinates[i][:2], coordinates[j][:2], coordinates[k][:2], coordinates[l][:2]]
+                        # add unique x and y values to subset
+                        for coord in subset:
+                            if coord[0] not in x_values:
+                                x_values.append(coord[0])
+                            if coord[1] not in y_values:
+                                y_values.append(coord[1])
+                        # if 2 unique x and y values we have a rectangle
+                        if len(x_values) == 2 and len(y_values) == 2:
+                            # append to x_wings array
+                            set = []
+                            for x in x_values:
+                                for y in y_values:
+                                    set.append((x, y))
+                            x_wings.append(set)
+    #return all x_wings found
+    return x_wings
 
 def X_wing(grid):
+    # get candidates for each cell
+    candidates = get_candidates(grid)
+    x_wings_candidates = []
+    for i in range(9):
+        for j in range(9):
+            if(grid[i][j]==0):
+                for number in range(1,10):
+                    # for each number check if it appears twice in that row or column
+                    if number in candidates[i][j]:
+                        if(twice_in_row(candidates,i,number) or (twice_in_column(candidates,j,number))):
+                            # append to x_wing_candidates array
+                            x_wings_candidates.append((i,j,number))
+
+    # in x_wings_candidates array check if we have a rectangle with the same number
+    x_wings = []     
+    # get coordinates for each number       
+    for number in range(1,10):
+        coordinates = []
+        # for each candidate check if it = a number
+        for i in range(len(x_wings_candidates)):
+            if x_wings_candidates[i][2] == number:
+                coordinates.append(x_wings_candidates[i])
+        #for the coordinate array check if we have a rectangle
+        rectangles = check_rectangle(coordinates)
+        # if we have a rectangle
+        if len(rectangles)>0:
+            for rectangle in rectangles:
+                print("X-wing found with coordinates:",rectangle,"for number:",number)
+            x_wings.append(rectangles)
+        
+                    
+                   
     return False
 
 def swordfish(grid):
