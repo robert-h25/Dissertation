@@ -190,7 +190,48 @@ def naked_subset(grid):
     return naked_subset
 
 def hidden_subset(grid):
+    # Get candidates for each cell
+    candidates = get_candidates(grid)
+    for i in range(9):
+        for j in range(9):
+            # empty cell
+            if grid[i][j] == 0:
+                # get candidates for that cell
+                candidate_for_cell = candidates[i][j]
+                # check if a pair of numbers appears twice
+                # check row,column and block cell candidates
+                for candidate in candidate_for_cell:
+                    # check row
+                    for a in range(9):
+                        # dont check current cell
+                        if candidate in candidate[a][j] and a != i:
+                            #handle logic
+                            pass
+                    # check column
+                    for a in range(9):
+                        if candidate in candidate[i][j]:
+                            #handle logic
+                            pass
+
+                    #check block
+                    current_row = 3 * math.floor(i / 3)
+                    current_column = 3 * math.floor(j / 3)
+                    for a in range(current_row, current_row + 3):
+                        for b in range(current_column, current_column + 3):
+                            # if we have the same candidate subset
+                            if candidates[i][j] == candidates[a][b] and i != a and j!=b:
+                                #handle logic
+                                pass
+                            
+                # check if a triplet of numbers appears three times
+                # check row,column and block cell candidates
+
+                # check if a quad of numbers appears 4 times
+                # check row,column and block cell candidates
+                pass
+    
     return False
+
 # Function to check if a number appears twice in a row
 def twice_in_row(candidates,row,number):
     count = 0
