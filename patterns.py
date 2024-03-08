@@ -188,40 +188,51 @@ def naked_subset(grid):
                     naked_subset.append(subset)
 
     return naked_subset
-
+"""
 def hidden_subset(grid):
     # Get candidates for each cell
     candidates = get_candidates(grid)
+    print(candidates)
     for i in range(9):
         for j in range(9):
             # empty cell
             if grid[i][j] == 0:
                 # get candidates for that cell
                 candidate_for_cell = candidates[i][j]
+                #Generate all pairs
+                pairs = []
+                for a in range(len(candidate_for_cell)):
+                    for b in range(a + 1, len(candidate_for_cell)):
+                        pairs.append((candidate_for_cell[a], candidate_for_cell[b]))
+                print(pairs)
+
                 # check if a pair of numbers appears twice
                 # check row,column and block cell candidates
-                for candidate in candidate_for_cell:
-                    # check row
+                count = 0
+                
+                for pair in pairs:
+                    count=0
                     for a in range(9):
-                        # dont check current cell
-                        if candidate in candidate[a][j] and a != i:
-                            #handle logic
-                            pass
-                    # check column
-                    for a in range(9):
-                        if candidate in candidate[i][j]:
-                            #handle logic
-                            pass
-
-                    #check block
-                    current_row = 3 * math.floor(i / 3)
-                    current_column = 3 * math.floor(j / 3)
-                    for a in range(current_row, current_row + 3):
-                        for b in range(current_column, current_column + 3):
-                            # if we have the same candidate subset
-                            if candidates[i][j] == candidates[a][b] and i != a and j!=b:
-                                #handle logic
-                                pass
+                        if pair[0] in candidates[a][j] and pair[1] in candidates[a][j] :
+                            count+=1
+                            #print(pair,candidates[a][j])
+                    if(count == 2):
+                        print("pair of numbers appear twice in row: ",i, "numbers are: ",pair)
+                count = 0
+                #check column
+                for a in range(9):
+                    
+                    if candidates[i][j] == candidates[i][a] and i != a:
+                        count +=1
+                count = 0
+                #check block
+                current_row = 3 * math.floor(i / 3)
+                current_column = 3 * math.floor(j / 3)
+                for a in range(current_row, current_row + 3):
+                    for b in range(current_column, current_column + 3):
+                        
+                        if candidates[i][j] == candidates[a][b] and i != a and j!=b:
+                            count+=1
                             
                 # check if a triplet of numbers appears three times
                 # check row,column and block cell candidates
@@ -231,7 +242,54 @@ def hidden_subset(grid):
                 pass
     
     return False
+"""
+def hidden_subset(grid):
+    # Get candidates for each cell
+    candidates = get_candidates(grid)
+    
+    for i in range(9):
+        # Keep track of pairs checked in that row
+        checked_pairs = []  
+        processed_numbers_row = []
+        hidden_subset = []
+        numbers_checked = []
+        for j in range(9):
+            # empty cell
+            if grid[i][j] == 0:
+                # get candidates for that cell
+                candidate_for_cell = candidates[i][j]
+                
+                # Generate pairs
+                pairs = []
+                for a in range(len(candidate_for_cell)):
+                    for b in range(a + 1, len(candidate_for_cell)):
+                        pairs.append((candidate_for_cell[a], candidate_for_cell[b]))
 
+                # Check if a pair of numbers appears twice in row
+                for pair in pairs:
+                    # skip if checked before
+                    if pair in checked_pairs: 
+                        continue
+                    #check all cells in that row
+                    count = 0
+                    for a in range(9):
+                        if pair[0] in candidates[i][a] and pair[1] in candidates[i][a]:
+                            count += 1
+                    # if count is 2 we have a pair
+                    if count == 2:
+                        #print("Pair of numbers appear twice in row:", i, "Numbers are:", pair)
+                        checked_pairs.append(pair)  
+                        processed_numbers_row.append(pair)
+                
+        # checking all pairs to see if we have a repeat number
+        for pair in checked_pairs:
+            if pair[0] not in numbers_checked and pair[1] not in numbers_checked:
+                hidden_subset.append(pair)
+                numbers_checked.append(pair[0])
+                numbers_checked.append(pair[1])
+        print("Hidden subset found on row:",i,"Pair is:",hidden_subset)
+        
+                                
 # Function to check if a number appears twice in a row
 def twice_in_row(candidates,row,number):
     count = 0
