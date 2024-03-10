@@ -422,6 +422,9 @@ def X_wing(grid):
     return False
 
 def swordfish(grid):
+    # Find cell with 2 candidates
+    # search row and column for a cell with the same candidates 
+    # search until 10 iterations or we end at the start cell
     return False
 
 def forcing_chain(grid):
@@ -475,7 +478,7 @@ def XY_wing(grid):
                                 if ((candidates[i][j][0] in candidates[a][b]) ^ (candidates[i][j][1] in candidates[a][b])) and i != a and j != b:
                                     #print(i,j,"match with",a,b ,"in block")
                                     matching_candidates.append((i,j,a,b))
-
+    xy_wings = []
     # search matching_candidates for a third cell
     for cells in matching_candidates:
         i1,j1=cells[0],cells[1]
@@ -490,9 +493,16 @@ def XY_wing(grid):
                 if(check_candidates(candidates_1,candidates_2,candidates_3)):
                     if((i1!=i2) and (i2!=a[2]) and (i1!=a[2])) :
                         if ((j1!=j2) or (j2!=a[3]) or (j1!=a[3])):
-                            print("XY-wing found between cells: (",i1,j1,") (",i2,j2,") (",a[2],a[3],")")
-                # change it so it aint all the same row,column
-    
+                            #print("XY-wing found between cells: (",i1,j1,") (",i2,j2,") (",a[2],a[3],")")
+                            xy_wings.append((i1,j1,i2,j2,a[2],a[3]))
+
+    # Delete duplicates in reverse
+    for xy_wing in xy_wings:
+        for check_xy_wing in xy_wings:
+            if (xy_wing != check_xy_wing):
+                if(xy_wing[0]==check_xy_wing[4]and xy_wing[1]==check_xy_wing[5]and xy_wing[2]==check_xy_wing[3]):
+                    xy_wings.remove(xy_wing)
+    print(xy_wings)
     return False
 
 def unique_rectangle(grid):
