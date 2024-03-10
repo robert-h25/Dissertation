@@ -452,7 +452,7 @@ def XY_wing(grid):
                         if len(candidates[a][j])== 2 and i != a:
                             # check if we have 1 common candidate
                             if ((candidates[i][j][0] in candidates[a][j]) ^ (candidates[i][j][1] in candidates[a][j])) and i != a:
-                                print(i,j,"match with",a,j ,"in row")
+                                #print(i,j,"match with",a,j ,"in row")
                                 matching_candidates.append((i,j,a,j))
                             
 
@@ -461,7 +461,7 @@ def XY_wing(grid):
                         if len(candidates[i][a])== 2 and j != a:
                             # check if we have 1 common candidate
                             if ((candidates[i][j][0] in candidates[i][a]) ^ (candidates[i][j][1] in candidates[i][a])) and j != a:
-                                print(i,j,"match with",i,a ,"in column")
+                                #print(i,j,"match with",i,a ,"in column")
                                 matching_candidates.append((i,j,i,a))
 
                     #check block
@@ -473,7 +473,7 @@ def XY_wing(grid):
                             if len(candidates[a][b])== 2 and i != a and j != b:
                                 # check if we have 1 common candidate
                                 if ((candidates[i][j][0] in candidates[a][b]) ^ (candidates[i][j][1] in candidates[a][b])) and i != a and j != b:
-                                    print(i,j,"match with",a,b ,"in block")
+                                    #print(i,j,"match with",a,b ,"in block")
                                     matching_candidates.append((i,j,a,b))
 
     # search matching_candidates for a third cell
@@ -488,7 +488,9 @@ def XY_wing(grid):
                 candidates_3 = candidates[a[2]][a[3]]
                 # find which cell is the middle and which are the wings                
                 if(check_candidates(candidates_1,candidates_2,candidates_3)):
-                    print("XY-wing found between cells: (",i1,j1,") (",i2,j2,") (",a[2],a[3],")")
+                    if((i1!=i2) and (i2!=a[2]) and (i1!=a[2])) :
+                        if ((j1!=j2) or (j2!=a[3]) or (j1!=a[3])):
+                            print("XY-wing found between cells: (",i1,j1,") (",i2,j2,") (",a[2],a[3],")")
                 # change it so it aint all the same row,column
     
     return False
