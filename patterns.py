@@ -224,7 +224,6 @@ def hidden_subset_row(grid,candidates):
                             count += 1
                     # if count is 2 we have a pair
                     if count == 2:
-                        #print("Pair of numbers appear twice in row:", i, "Numbers are:", pair)
                         checked_pairs.append(pair)  
                 
         # checking all pairs to see if we have a repeat number
@@ -335,7 +334,6 @@ def hidden_subset(grid):
     hidden_subset_blocks = hidden_subset_block(grid, candidates)
     for i, hidden_subset in hidden_subset_blocks:
         print("Hidden subset found in block:", i, "Pair is:", hidden_subset)
-    
         
                                 
 # Function to check if a number appears twice in a row
@@ -429,7 +427,70 @@ def swordfish(grid):
 def forcing_chain(grid):
     return False
 
+def check_candidates(cell1, cell2, cell3):
+    common_number_cell1_cell2 = [num for num in cell1 if num in cell2]
+    common_number_cell2_cell3 = [num for num in cell2 if num in cell3]
+    
+    if len(common_number_cell1_cell2) == 1 and len(common_number_cell2_cell3) == 1:
+        if common_number_cell1_cell2 != common_number_cell2_cell3:
+            return True
+    
+    return False
+
 def XY_wing(grid):
+    candidates = get_candidates(grid)
+    # list to hold matching candidates in cells
+    matching_candidates = []
+    # scan grid for cells with 2 candidates
+    for i in range(9):
+        for j in range(9):
+            if grid[i][j] == 0:
+                # if candidates=2 scan block, column, row for another cell with 2 candidates
+                if len(candidates[i][j])==2:
+                    # check row
+                    for a in range(9):
+                        if len(candidates[a][j])== 2 and i != a:
+                            # check if we have 1 common candidate
+                            if ((candidates[i][j][0] in candidates[a][j]) ^ (candidates[i][j][1] in candidates[a][j])) and i != a:
+                                print(i,j,"match with",a,j ,"in row")
+                                matching_candidates.append((i,j,a,j))
+                            
+
+                    # check column 
+                    for a in range(9):
+                        if len(candidates[i][a])== 2 and j != a:
+                            # check if we have 1 common candidate
+                            if ((candidates[i][j][0] in candidates[i][a]) ^ (candidates[i][j][1] in candidates[i][a])) and j != a:
+                                print(i,j,"match with",i,a ,"in column")
+                                matching_candidates.append((i,j,i,a))
+
+                    #check block
+                    current_row = 3 * math.floor(i / 3)
+                    current_column = 3 * math.floor(j / 3)
+                    # Search square for number
+                    for a in range(current_row, current_row + 3):
+                        for b in range(current_column, current_column + 3):
+                            if len(candidates[a][b])== 2 and i != a and j != b:
+                                # check if we have 1 common candidate
+                                if ((candidates[i][j][0] in candidates[a][b]) ^ (candidates[i][j][1] in candidates[a][b])) and i != a and j != b:
+                                    print(i,j,"match with",a,b ,"in block")
+                                    matching_candidates.append((i,j,a,b))
+
+    # search matching_candidates for a third cell
+    for cells in matching_candidates:
+        i1,j1=cells[0],cells[1]
+        i2,j2=cells[2],cells[3]
+        # check for a third cell that intersects one of the cells
+        for a in matching_candidates:
+            if i2 == a[0] and j2 == a[1]:
+                candidates_1 = candidates[i1][j1]
+                candidates_2 = candidates[i2][j2]
+                candidates_3 = candidates[a[2]][a[3]]
+                # find which cell is the middle and which are the wings                
+                if(check_candidates(candidates_1,candidates_2,candidates_3)):
+                    print("XY-wing found between cells: (",i1,j1,") (",i2,j2,") (",a[2],a[3],")")
+                # change it so it aint all the same row,column
+    
     return False
 
 def unique_rectangle(grid):
