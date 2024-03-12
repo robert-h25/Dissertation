@@ -471,15 +471,14 @@ def swordfish(grid):
             # check if number appears 2 or 3 times in that row
             count = sum(1 for column in range(9) if number in candidates[i][column])
             if count == 2 or count == 3:
-                print(number, "appears", count, "times in row", i)
+                #print(number, "appears", count, "times in row", i)
                 # check if that number appears in another column
                 # check if column contains at least 2 shared cells
                 for j in range(9):
                     if number in candidates[i][j]:
                         # Store the coordinates of where that number appears
                         corners.append((i, j,number)) 
-    print(corners)
-    coords = []
+
     # Check if a coodinate for a number connect to 1 row and 1 column
     for number in range(1,10):
         coords = []
@@ -494,7 +493,10 @@ def swordfish(grid):
             # add to coords list if not in there
             if(coord[0],coord[1])not in coords:
                 coords.append((coord[0],coord[1]))
-        print(coords)                 
+
+        #check if we have swordfish if amount of col and row value == 3
+        if len(coords) == 6:
+            print("Swordfish occurs with coordinates:",coords,"for number:",number)                
                 
     return False
 
