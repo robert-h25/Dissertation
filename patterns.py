@@ -420,28 +420,81 @@ def X_wing(grid):
                     
                    
     return False
+
+# Function to check if a number appears twice in a column of coordinates
+def number_twice_in_col(coordinates,number):
+    col_counts = {}
+    twice_col = []
+    
+    # Count occurrence of column value
+    for coord in coordinates:
+        col = coord[1]
+        if coord[2] == number:
+            col_counts[col] = col_counts.get(col, 0) + 1
+    
+    # if count==2 add to list
+    for coord in coordinates:
+        col = coord[1]
+        if coord[2] == number and col_counts[col] == 2:
+            twice_col.append(coord)
+    
+    return twice_col
+
+# Function to check if a number appears twice in a row of coordinates
+def number_twice_in_row(coordinates,number):
+    row_counts = {}
+    twice_row = []
+    
+    # Count occurrences of row value
+    for coord in coordinates:
+        row = coord[0]
+        if coord[2] == number:
+            row_counts[row] = row_counts.get(row, 0) + 1
+    
+    # add to list if count ==2
+    for coord in coordinates:
+        row = coord[0]
+        if coord[2] == number and row_counts[row] == 2:
+            twice_row.append(coord)
+            
+    return twice_row
+
 # x wing on steroids in a 3x3 rectangle
 def swordfish(grid):
     candidates = get_candidates(grid)
     corners = []
+
     # find a cell where one of the candidates only appears twice in that row/column
     for number in range(1, 10):
         # check row
         for i in range(9):
             # check if number appears 2 or 3 times in that row
-            count_in_row = sum(1 for column in range(9) if number in candidates[i][column])
-            if count_in_row == 2 or count_in_row == 3:
-                #check column
+            count = sum(1 for column in range(9) if number in candidates[i][column])
+            if count == 2 or count == 3:
+                print(number, "appears", count, "times in row", i)
+                # check if that number appears in another column
+                # check if column contains at least 2 shared cells
                 for j in range(9):
                     if number in candidates[i][j]:
-                        # check if number appears 2 or 3 times in the same column
-                        count_in_col = sum(1 for row in range(9) if number in candidates[row][j])
-                        if count_in_col == 2 or count_in_col == 3:
-                            # Store the coordinates of where that number appears
-                            corners.append((i, j, number)) 
-                            print(number,"appears",count_in_row,"times in row",i,"and",count_in_col,"times in column",j)
+                        # Store the coordinates of where that number appears
+                        corners.append((i, j,number)) 
     print(corners)
-    #from corners find if we can construct a swordfish
+    coords = []
+    # Check if a coodinate for a number connect to 1 row and 1 column
+    for number in range(1,10):
+        coords = []
+        # check if a number appears twice in a row and column
+        result = number_twice_in_row(corners,number)
+        for coord in result:
+            # add to coords list if not in there
+            if(coord[0],coord[1])not in coords:
+                coords.append((coord[0],coord[1]))
+        result = number_twice_in_col(corners,number)
+        for coord in result:
+            # add to coords list if not in there
+            if(coord[0],coord[1])not in coords:
+                coords.append((coord[0],coord[1]))
+        print(coords)                 
                 
     return False
 
