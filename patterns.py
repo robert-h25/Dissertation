@@ -420,11 +420,29 @@ def X_wing(grid):
                     
                    
     return False
-
+# x wing on steroids in a 3x3 rectangle
 def swordfish(grid):
-    # Find cell with 2 candidates
-    # search row and column for a cell with the same candidates 
-    # search until 10 iterations or we end at the start cell
+    candidates = get_candidates(grid)
+    corners = []
+    # find a cell where one of the candidates only appears twice in that row/column
+    for number in range(1, 10):
+        # check row
+        for i in range(9):
+            # check if number appears 2 or 3 times in that row
+            count_in_row = sum(1 for column in range(9) if number in candidates[i][column])
+            if count_in_row == 2 or count_in_row == 3:
+                #check column
+                for j in range(9):
+                    if number in candidates[i][j]:
+                        # check if number appears 2 or 3 times in the same column
+                        count_in_col = sum(1 for row in range(9) if number in candidates[row][j])
+                        if count_in_col == 2 or count_in_col == 3:
+                            # Store the coordinates of where that number appears
+                            corners.append((i, j, number)) 
+                            print(number,"appears",count_in_row,"times in row",i,"and",count_in_col,"times in column",j)
+    print(corners)
+    #from corners find if we can construct a swordfish
+                
     return False
 
 def forcing_chain(grid):
