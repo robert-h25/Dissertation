@@ -581,6 +581,7 @@ def XY_wing(grid):
 def unique_rectangle(grid):
     # find an empty cell
     candidates = get_candidates(grid)
+    unique_rectangle = []
     for i in range(9):
         for j in range(9):
             if grid[i][j] == 0:
@@ -592,20 +593,41 @@ def unique_rectangle(grid):
 
                 # check row AND column if this pair occurs again
                 for pair in pairs:
+                    corners =[]
+                    corners.append((i,j))
+                    in_row = 0
+                    in_col = 0
                     #check row
-                    for a in range(9):
-                        if len(candidates[a][j])> 2 and i != a:
+                    for a in range(i,9):
+                        if len(candidates[a][j])> 1 and i != a:
                             if pair[0] in candidates[a][j] and pair[1] in candidates[a][j]:
                                 # pair occurs again 
+                                in_row+=1
+                                corners.append((a,j))
                                 pass
-                    for a in range(9):
-                        if len(candidates[i][a])> 2 and j != a:
+                    for a in range(j,9):
+                        if len(candidates[i][a])> 1 and j != a:
                             if pair[0] in candidates[i][a] and pair[1] in candidates[i][a]:
                                 # pair occurs again
-                                pass
+                                in_col+=1
+                                corners.append((i,a))
+                                #print(pair[0],pair[1],i,a)
+                    #check if we have the same pair in row and column  
+                    if(in_row>0 and in_col>0):
+                        # check if cells interact        
+                        #print(corners,pair)
+                        for a in range(1,len(corners)):
+                            for b in range(a+1,len(corners)):
+                                #print(corners[a][0],corners[b][1])
+                                if((corners[a][0],corners[b][1])not in corners):
+                                    if(pair[0] in candidates[corners[a][0]][corners[b][1]] and pair[1] in candidates[corners[a][0]][corners[b][1]]):
+                                        # append to list if (i,j) for pair not in already
+                                        if (i,j) not in [r[0] for r in unique_rectangle]:
+                                            print("unique rectangle found with coordinates:",(i,j),(corners[a]),( corners[b]),(corners[a][0],corners[b][1]),"for pair:",pair)
+                                            unique_rectangle.append(((i,j),(corners[a]),( corners[b]),(corners[a][0],corners[b][1]),pair))
 
-    # if yes check these two cells have another cell with the pair
-    # check if this cell intersects
+    print(unique_rectangle)                           
+
     return False
 
 # Function to run through all the patterns
