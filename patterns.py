@@ -579,6 +579,33 @@ def XY_wing(grid):
     return False
 
 def unique_rectangle(grid):
+    # find an empty cell
+    candidates = get_candidates(grid)
+    for i in range(9):
+        for j in range(9):
+            if grid[i][j] == 0:
+                # get candidates for that cell
+                candidate_for_cell = candidates[i][j]
+                
+                # Generate pairs
+                pairs = generate_pairs(candidate_for_cell)
+
+                # check row AND column if this pair occurs again
+                for pair in pairs:
+                    #check row
+                    for a in range(9):
+                        if len(candidates[a][j])> 2 and i != a:
+                            if pair[0] in candidates[a][j] and pair[1] in candidates[a][j]:
+                                # pair occurs again 
+                                pass
+                    for a in range(9):
+                        if len(candidates[i][a])> 2 and j != a:
+                            if pair[0] in candidates[i][a] and pair[1] in candidates[i][a]:
+                                # pair occurs again
+                                pass
+
+    # if yes check these two cells have another cell with the pair
+    # check if this cell intersects
     return False
 
 # Function to run through all the patterns
