@@ -505,16 +505,16 @@ def check_chain(candidates,row,col,number,visited_cells):
     #check row
     for a in range(9):
         if len(candidates[a][col])==2 and row != a and number in candidates[a][col] and (a,col) not in visited_cells:
-            print("continue chain row at:",a,col)
+            #print("continue chain row at:",a,col)
             number = get_other_candidate(candidates[a][col],candidates[row][col])
-            visited_cells.append((row,col))
+            visited_cells.append((a,col))
             check_chain(candidates,a,col,number,visited_cells)
     #check column
     for a in range(9):
         if len(candidates[row][a])==2 and col != a and number in candidates[row][a] and (row,a) not in visited_cells:
-            print("continue chain col at:",row,a)
+            #print("continue chain col at:",row,a)
             number = get_other_candidate(candidates[row][a],candidates[row][col])
-            visited_cells.append((row,col))
+            visited_cells.append((row,a))
             check_chain(candidates,row,a,number,visited_cells)
     #check block
     current_row = 3 * math.floor(row / 3)
@@ -522,11 +522,12 @@ def check_chain(candidates,row,col,number,visited_cells):
     for a in range(current_row, current_row + 3):
         for b in range(current_column, current_column + 3):
             if len(candidates[a][b])==2 and row != a and col!=b and number in candidates[a][b] and (a,b) not in visited_cells:
-                print("continue chain block at:",a,b)
+                #print("continue chain block at:",a,b)
                 number = get_other_candidate(candidates[a][b],candidates[row][col])
-                visited_cells.append((row,col))
+                visited_cells.append((a,b))
                 check_chain(candidates,a,b,number,visited_cells)
-    return
+    #print(visited_cells)
+    return  visited_cells
 
 def get_other_candidate(i,j):
     if(i[0]==j[0]):
@@ -546,7 +547,24 @@ def get_matching_candidate(i,j):
         number = i[1]
     return number
 
+def check_link(coords):
+    for i in range(len(coords) - 1):
+        x1, y1 = coords[i]
+        x2, y2 = coords[i + 1]
+        if x1 == x2 or y1 == y2 or (x1 // 3 == x2 // 3 and y1 // 3 == y2 // 3):
+            pass 
+        else:
+            return False
+    seen = []
+    for coord in coords:
+        if coord in seen:
+            return False
+        seen.append(coord)
+    return True 
+
+
 def forcing_chain(grid):
+    forcing_chain = []
     candidates = get_candidates(grid)
     #print(candidates)
     # find empty cell with 2 candidates
@@ -555,25 +573,28 @@ def forcing_chain(grid):
         for j in range(9):
             # check col,row, block for another cell with 2 candidates and 1 matching candidate as previous cell
             if len(candidates[i][j])==2:
+                #print(i,j)
                 visited_cells = []
                 # check row
                 for a in range(9):
                     if  len(candidates[a][j])==2 and i != a and ((a,j) not in checked_cells):
                         if (candidates[i][j][0] in candidates[a][j]) ^ (candidates[i][j][1] in candidates[a][j]):
-                            print(i,j,candidates[a][j],candidates[i][j])
+                            #print(i,j,candidates[a][j],candidates[i][j])
                             number = get_matching_candidate(candidates[a][j],candidates[i][j])
                             visited_cells.append((i,j))
                             #check for chain
-                            check_chain(candidates,i,j,number,visited_cells)
+                            visited_cells = check_chain(candidates,i,j,number,visited_cells)
+                            #print(visited_cells)
                             #checked_cells.append((i,j))
                 #check column
                 for a in range(9):
                     if len(candidates[i][a])==2 and j != a and((i,a) not in checked_cells):
                         if (candidates[i][j][0] in candidates[i][a]) ^ (candidates[i][j][1] in candidates[i][a]):
-                            print(i,j,candidates[i][a],candidates[i][j])
+                            #print(i,j,candidates[i][a],candidates[i][j])
                             number = get_matching_candidate(candidates[i][a],candidates[i][j])
                             visited_cells.append((i,j))
-                            check_chain(candidates,i,j,number,visited_cells)
+                            visited_cells = check_chain(candidates,i,j,number,visited_cells)
+                            #print(visited_cells)
                             #checked_cells.append((i,j))
 
                 #check block
@@ -583,11 +604,16 @@ def forcing_chain(grid):
                     for b in range(current_column, current_column + 3):
                         if len(candidates[a][b])==2 and i != a and j!=b and ((a,b) not in checked_cells):                           
                             if (candidates[i][j][0] in candidates[a][b]) ^ (candidates[i][j][1] in candidates[a][b]):
-                                print(i,j,candidates[a][b],candidates[i][j])
+                                #print(i,j,candidates[a][b],candidates[i][j])
                                 number = get_matching_candidate(candidates[a][b],candidates[i][j])
                                 visited_cells.append((i,j))
-                                check_chain(candidates,i,j,number,visited_cells)
+                                visited_cells = check_chain(candidates,i,j,number,visited_cells)
+                                #print(visited_cells)
                                 #checked_cells.append((i,j))
+                check_link(visited_cells)
+                length = len(visited_cells)
+                if(check_link(visited_cells) == True and length>0):
+                    print("Forcing link with cells of coordinates",visited_cells)
 
     # check col,row, block for another cell with 2 candidates and 1 matching candidate as previous cell
     # repeat until we can not find another cell
@@ -666,7 +692,9 @@ def XY_wing(grid):
             if (xy_wing != check_xy_wing):
                 if(xy_wing[0]==check_xy_wing[4]and xy_wing[1]==check_xy_wing[5]and xy_wing[2]==check_xy_wing[3]):
                     xy_wings.remove(xy_wing)
-    print(xy_wings)
+    for xy_wing in xy_wings:
+        print("XY Wing found with coordinates:",xy_wing)
+    #print(xy_wings)
     return False
 
 def unique_rectangle(grid):
@@ -717,7 +745,7 @@ def unique_rectangle(grid):
                                             print("unique rectangle found with coordinates:",(i,j),(corners[a]),( corners[b]),(corners[a][0],corners[b][1]),"for pair:",pair)
                                             unique_rectangle.append(((i,j),(corners[a]),( corners[b]),(corners[a][0],corners[b][1]),pair))
 
-    print(unique_rectangle)                           
+    #print(unique_rectangle)                           
 
     return False
 
@@ -732,5 +760,6 @@ def patterns(grid):
     X_wing(grid)
     swordfish(grid)
     forcing_chain(grid)
-    #XY_wing(grid)
-    #unique_rectangle(grid)
+    XY_wing(grid)
+    unique_rectangle(grid)
+    print("Successfully ran all patterns")
