@@ -500,7 +500,98 @@ def swordfish(grid):
                 
     return False
 
+def check_chain(candidates,row,col,number,visited_cells):
+    # at row,col check if we can continue the chain
+    #check row
+    for a in range(9):
+        if len(candidates[a][col])==2 and row != a and number in candidates[a][col] and (a,col) not in visited_cells:
+            print("continue chain row at:",a,col)
+            number = get_other_candidate(candidates[a][col],candidates[row][col])
+            visited_cells.append((row,col))
+            check_chain(candidates,a,col,number,visited_cells)
+    #check column
+    for a in range(9):
+        if len(candidates[row][a])==2 and col != a and number in candidates[row][a] and (row,a) not in visited_cells:
+            print("continue chain col at:",row,a)
+            number = get_other_candidate(candidates[row][a],candidates[row][col])
+            visited_cells.append((row,col))
+            check_chain(candidates,row,a,number,visited_cells)
+    #check block
+    current_row = 3 * math.floor(row / 3)
+    current_column = 3 * math.floor(col / 3)
+    for a in range(current_row, current_row + 3):
+        for b in range(current_column, current_column + 3):
+            if len(candidates[a][b])==2 and row != a and col!=b and number in candidates[a][b] and (a,b) not in visited_cells:
+                print("continue chain block at:",a,b)
+                number = get_other_candidate(candidates[a][b],candidates[row][col])
+                visited_cells.append((row,col))
+                check_chain(candidates,a,b,number,visited_cells)
+    return
+
+def get_other_candidate(i,j):
+    if(i[0]==j[0]):
+        number = i[1]
+    elif(i[0]==j[1]):
+        number = i[1]
+    else:
+        number = i[0]
+    return number
+
+def get_matching_candidate(i,j):
+    if(i[0]==j[0]):
+        number = i[0]
+    elif(i[0]==j[1]):
+        number = i[0]
+    else:
+        number = i[1]
+    return number
+
 def forcing_chain(grid):
+    candidates = get_candidates(grid)
+    #print(candidates)
+    # find empty cell with 2 candidates
+    checked_cells = []
+    for i in range(9):
+        for j in range(9):
+            # check col,row, block for another cell with 2 candidates and 1 matching candidate as previous cell
+            if len(candidates[i][j])==2:
+                visited_cells = []
+                # check row
+                for a in range(9):
+                    if  len(candidates[a][j])==2 and i != a and ((a,j) not in checked_cells):
+                        if (candidates[i][j][0] in candidates[a][j]) ^ (candidates[i][j][1] in candidates[a][j]):
+                            print(i,j,candidates[a][j],candidates[i][j])
+                            number = get_matching_candidate(candidates[a][j],candidates[i][j])
+                            visited_cells.append((i,j))
+                            #check for chain
+                            check_chain(candidates,i,j,number,visited_cells)
+                            #checked_cells.append((i,j))
+                #check column
+                for a in range(9):
+                    if len(candidates[i][a])==2 and j != a and((i,a) not in checked_cells):
+                        if (candidates[i][j][0] in candidates[i][a]) ^ (candidates[i][j][1] in candidates[i][a]):
+                            print(i,j,candidates[i][a],candidates[i][j])
+                            number = get_matching_candidate(candidates[i][a],candidates[i][j])
+                            visited_cells.append((i,j))
+                            check_chain(candidates,i,j,number,visited_cells)
+                            #checked_cells.append((i,j))
+
+                #check block
+                current_row = 3 * math.floor(i / 3)
+                current_column = 3 * math.floor(j / 3)
+                for a in range(current_row, current_row + 3):
+                    for b in range(current_column, current_column + 3):
+                        if len(candidates[a][b])==2 and i != a and j!=b and ((a,b) not in checked_cells):                           
+                            if (candidates[i][j][0] in candidates[a][b]) ^ (candidates[i][j][1] in candidates[a][b]):
+                                print(i,j,candidates[a][b],candidates[i][j])
+                                number = get_matching_candidate(candidates[a][b],candidates[i][j])
+                                visited_cells.append((i,j))
+                                check_chain(candidates,i,j,number,visited_cells)
+                                #checked_cells.append((i,j))
+
+    # check col,row, block for another cell with 2 candidates and 1 matching candidate as previous cell
+    # repeat until we can not find another cell
+    # test numbers to see if we can force numbers
     return False
 
 def check_candidates(cell1, cell2, cell3):
@@ -641,5 +732,5 @@ def patterns(grid):
     X_wing(grid)
     swordfish(grid)
     forcing_chain(grid)
-    XY_wing(grid)
-    unique_rectangle(grid)
+    #XY_wing(grid)
+    #unique_rectangle(grid)
