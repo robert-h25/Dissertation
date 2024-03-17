@@ -5,6 +5,7 @@ import math
 
 # Find a sole candidate
 def sole_technique(grid):
+    sole_candidate = []
     # Search each cell in the grid
     for i in range(9):
         for j in range(9):
@@ -22,12 +23,13 @@ def sole_technique(grid):
                 # if sole candidate flag that cell
                 if len(numbers)==1:
                     print("sole candidate\n")
-                    pass
-            
-    return False
+                    sole_candidate.append((i,j,x))
+    #print(sole_candidate)
+    return sole_candidate
 
 # Find unique candidates
 def unique_candidate(grid):
+    unique_candidate = []
     # search grid for an empty cell
     for i in range(9):
         for j in range(9):
@@ -40,9 +42,10 @@ def unique_candidate(grid):
                        Check_square(grid, i, j, x)):
                         # check if the number is unique in its block
                         if check_block_row_columns(grid, i, j, x):
-                            print("Unique candidate found at position ({}, {}): {}".format(i, j, x))
-
-    return False
+                            print("Unique candidate found at position:",i,j,"For number:",x)
+                            unique_candidate.append((i,j,x))
+    #print(unique_candidate)
+    return unique_candidate
 
 # Check if the number is unique in its row and block columns
 def check_block_row_columns(grid, row, col, x):
@@ -72,6 +75,7 @@ def get_possible_numbers(grid, row, col):
 
 # Function to find a number within a specific row or column
 def BRC_interaction(grid):
+    BRC_interaction = []
     # Check each number
     for number in range(1,10):
         # iterate over each block
@@ -92,15 +96,18 @@ def BRC_interaction(grid):
                             column.append(current_col)
                 # Check if we have 1 instance of that number in the column/row
                 if len(row) == 1:
-                    print(f"Number {number} is unique in row {row.pop()} within block ({i}, {j})")
+                    print("Number",number," is unique in row",row," within block(",i,j,")")
+                    BRC_interaction.append((number,row[0],i,j))
                 if len(column) == 1:
-                    print(f"Number {number} is unique in column {column.pop()} within  block ({i}, {j})")
+                    print("Number",number," is unique in column",column," within block(",i,j,")")
+                    BRC_interaction.append((number,column[0],i,j))
         
-                
-    return False
+    #print(BRC_interaction)       
+    return BRC_interaction
 
 
 def block_block_interaction(grid):
+    block_block_interaction = []
     # Looping through each block
     for row_block in range(3):
         for col_block in range(3):
@@ -125,8 +132,9 @@ def block_block_interaction(grid):
                 # if we have a number to eliminate from a set of cells
                 if possible_numbers >0:
                     print("Elimate",number,"from cells:",elimated_cells)
-
-    return False
+                    block_block_interaction.append((number,elimated_cells))
+    #print(block_block_interaction)
+    return block_block_interaction
 
 
 
@@ -318,23 +326,28 @@ def hidden_subset_block(grid, candidates):
 
 # Function to check hidden subsets in a grid
 def hidden_subset(grid):
+    hidden_subsets = []
     # Get candidates for each cell
     candidates = get_candidates(grid)
     # Get hidden subset in the row
     hidden_subset_rows = hidden_subset_row(grid, candidates)
     for i, hidden_subset in hidden_subset_rows:
         print("Hidden subset found on row:", i, "Pair is:", hidden_subset)
+        hidden_subsets.append((i,hidden_subset))
     
     # Get hidden subset in column
     hidden_subset_columns = hidden_subset_column(grid, candidates)
     for i, hidden_subset in hidden_subset_columns:
         print("Hidden subset found on Column:", i, "Pair is:", hidden_subset)
+        hidden_subsets.append((i,hidden_subset))
 
     # Get hidden subset in column
     hidden_subset_blocks = hidden_subset_block(grid, candidates)
     for i, hidden_subset in hidden_subset_blocks:
         print("Hidden subset found in block:", i, "Pair is:", hidden_subset)
-        
+        hidden_subsets.append((i,hidden_subset))
+
+    return hidden_subsets  
                                 
 # Function to check if a number appears twice in a row
 def twice_in_row(candidates,row,number):
@@ -419,7 +432,7 @@ def X_wing(grid):
         
                     
                    
-    return False
+    return x_wings
 
 # Function to check if a number appears twice in a column of coordinates
 def number_twice_in_col(coordinates,number):
@@ -461,6 +474,7 @@ def number_twice_in_row(coordinates,number):
 
 # x wing on steroids in a 3x3 rectangle
 def swordfish(grid):
+    swordfish = []
     candidates = get_candidates(grid)
     corners = []
 
@@ -496,7 +510,8 @@ def swordfish(grid):
 
         #check if we have swordfish if amount of col and row value == 3
         if len(coords) == 6:
-            print("Swordfish occurs with coordinates:",coords,"for number:",number)                
+            print("Swordfish occurs with coordinates:",coords,"for number:",number)   
+            swordfish.append((coords,number))             
                 
     return False
 
@@ -614,11 +629,9 @@ def forcing_chain(grid):
                 length = len(visited_cells)
                 if(check_link(visited_cells) == True and length>0):
                     print("Forcing link with cells of coordinates",visited_cells)
+                    forcing_chain.append((visited_cells))
 
-    # check col,row, block for another cell with 2 candidates and 1 matching candidate as previous cell
-    # repeat until we can not find another cell
-    # test numbers to see if we can force numbers
-    return False
+    return forcing_chain
 
 def check_candidates(cell1, cell2, cell3):
     common_number_cell1_cell2 = [num for num in cell1 if num in cell2]
@@ -694,8 +707,9 @@ def XY_wing(grid):
                     xy_wings.remove(xy_wing)
     for xy_wing in xy_wings:
         print("XY Wing found with coordinates:",xy_wing)
+
     #print(xy_wings)
-    return False
+    return xy_wings
 
 def unique_rectangle(grid):
     # find an empty cell
@@ -747,7 +761,7 @@ def unique_rectangle(grid):
 
     #print(unique_rectangle)                           
 
-    return False
+    return unique_rectangle
 
 # Function to run through all the patterns
 def patterns(grid):
