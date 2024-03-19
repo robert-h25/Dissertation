@@ -513,7 +513,7 @@ def swordfish(grid):
             print("Swordfish occurs with coordinates:",coords,"for number:",number)   
             swordfish.append((coords,number))             
                 
-    return False
+    return swordfish
 
 def check_chain(candidates,row,col,number,visited_cells):
     # at row,col check if we can continue the chain
