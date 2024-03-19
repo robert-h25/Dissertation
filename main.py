@@ -1,5 +1,6 @@
 from patterns import *
 from puzzle_generator import *
+from grader import *
 
 if __name__ == "__main__":
     #grid = Generate_puzzle()
@@ -76,4 +77,5 @@ if __name__ == "__main__":
     [0, 5, 0, 0, 0, 0, 0, 0, 0]
     ]
 
-    patterns(grid)
+    sole_technique,unique_candidate,BRC_interaction,block_block_interaction,naked_subset,hidden_subset,X_wing,swordfish,forcing_chain,XY_wing,unique_rectangle = patterns(grid)
+    grader(sole_technique,unique_candidate,BRC_interaction,block_block_interaction,naked_subset,hidden_subset,X_wing,swordfish,forcing_chain,XY_wing,unique_rectangle)
