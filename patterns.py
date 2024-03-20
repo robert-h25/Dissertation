@@ -513,7 +513,7 @@ def swordfish(grid):
             print("Swordfish occurs with coordinates:",coords,"for number:",number)   
             swordfish.append((coords,number))             
                 
-    return False
+    return swordfish
 
 def check_chain(candidates,row,col,number,visited_cells):
     # at row,col check if we can continue the chain
@@ -765,15 +765,17 @@ def unique_rectangle(grid):
 
 # Function to run through all the patterns
 def patterns(grid):
-    sole_technique(grid)
-    unique_candidate(grid)
-    BRC_interaction(grid)
-    block_block_interaction(grid)
-    naked_subset(grid)
-    hidden_subset(grid)
-    X_wing(grid)
-    swordfish(grid)
-    forcing_chain(grid)
-    XY_wing(grid)
-    unique_rectangle(grid)
+    sole_techniques = sole_technique(grid)
+    unique_candidates = unique_candidate(grid)
+    BRC_interactions = BRC_interaction(grid)
+    block_block_interactions = block_block_interaction(grid)
+    naked_subsets = naked_subset(grid)
+    hidden_subsets = hidden_subset(grid)
+    X_wings = X_wing(grid)
+    swordfishs = swordfish(grid)
+    forcing_chains = forcing_chain(grid)
+    XY_wings = XY_wing(grid)
+    unique_rectangles = unique_rectangle(grid)
     print("Successfully ran all patterns")
+
+    return sole_techniques,unique_candidates,BRC_interactions,block_block_interactions,naked_subsets,hidden_subsets,X_wings,swordfishs,forcing_chains,XY_wings,unique_rectangles
