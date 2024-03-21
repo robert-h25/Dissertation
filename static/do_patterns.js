@@ -5,7 +5,9 @@ document.getElementById("get_patterns").addEventListener("click", function() {
         .then(response => response.json())
         .then(data => {
             // Handle the response from the server
-            console.log(data);
+            console.log("Patterns:", data.patterns);
+            console.log("Score:", data.score);
+            
         })
         .catch(error => {
             console.error(error);

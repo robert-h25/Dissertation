@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, session
 from puzzle_generator import *
 from patterns import *
+from grader import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "sc21rh_diss"
@@ -21,11 +22,14 @@ def generate_puzzle():
 
 @app.route('/generate_patterns', methods =['POST'])
 def generate_patterns():
+    # get grid from sessions
     grid = session.get('grid')
-    sole_technique,unique_candidate,BRC_interaction,block_block_interaction,naked_subset,hidden_subset,X_wing,swordfish,forcing_chain,XY_wing,unique_rectangle = patterns(grid)
-    # format
-
-    return jsonify()
+    #perform pattern search and get total score
+    pattern = patterns(grid)
+    sole_technique,unique_candidate,BRC_interaction,block_block_interaction,naked_subset,hidden_subset,X_wing,swordfish,forcing_chain,XY_wing,unique_rectangle = pattern
+    score = grader(sole_technique,unique_candidate,BRC_interaction,block_block_interaction,naked_subset,hidden_subset,X_wing,swordfish,forcing_chain,XY_wing,unique_rectangle)
+    #jsonify reponse for JS
+    return jsonify(patterns = pattern,score=score)
 
 if __name__ == '__main__':
     app.run(debug=True)
