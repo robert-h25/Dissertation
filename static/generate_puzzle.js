@@ -11,6 +11,8 @@ document.getElementById("generate_puzzle").addEventListener("click", function() 
             const table = document.getElementById("table");
             // clear previous table displayed
             table.innerHTML = ""; 
+            const patternsCon = document.getElementById("patterns");
+            patternsCon.innerHTML = ""; 
             const grid = data.grid;
             //display grid
             grid.forEach(rowData => {
