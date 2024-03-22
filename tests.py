@@ -67,8 +67,8 @@ if __name__ == '__main__':
     grader(sole_technique,unique_candidate,BRC_interaction,block_block_interaction,naked_subset,hidden_subset,X_wing,swordfish,forcing_chain,XY_wing,unique_rectangle)
 
     # run all test
-    count = 0       # variable to count number of correct test
-
+    count = 0       
+    
     if TEST_generate_puzzle(grid): count+=1
     if TEST_sole_technique(grid): count+=1
     if TEST_unique_candidate(grid): count+=1
