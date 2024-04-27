@@ -12,13 +12,13 @@ def index():
 
 @app.route('/generate_puzzle', methods=['POST'])
 def generate_puzzle():
-    puzzle = Generate_puzzle()
-    print(puzzle)
-    session['grid'] = puzzle
+    grid = Generate_puzzle()
+    print(grid)
+    session['grid'] = grid
     # save to sessions
-    formatted_puzzle = [[int(num) for num in row] for row in puzzle]
+    formatted_grid = [[int(num) for num in row] for row in grid]
 
-    return jsonify(grid=formatted_puzzle)
+    return jsonify(grid=formatted_grid)
 
 @app.route('/generate_patterns', methods =['POST'])
 def generate_patterns():
