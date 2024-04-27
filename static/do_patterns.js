@@ -23,7 +23,7 @@ document.getElementById("get_patterns").addEventListener("click", function() {
 
 // TODO: format the data for the display
 // Function to display the patterns and score
-function display_data(patterns,score) {
+function display_data(patterns, score) {
     const patternsCon = document.getElementById("patterns");
     patternsCon.innerHTML = ""; 
 
@@ -44,16 +44,22 @@ function display_data(patterns,score) {
 
     // add patterns
     patterns.forEach((value, index) => {
-        const patternDiv = document.createElement("div");
-        patternDiv.classList.add("pattern");
+        const patternDiv = document.createElement("div"); // Create a new div element for each pattern
+        patternDiv.classList.add("pattern"); // Add the "pattern" class to the div
         // get name and display data for each
-        patternDiv.innerHTML = `<strong>${patternNames[index]}:</strong> ${value}`;
-        // add to the div
+        patternDiv.innerHTML = `<strong>${patternNames[index]}:</strong> occurs ${value.length} times`;
+        // add to the patternsCon div
         patternsCon.appendChild(patternDiv);
     });
 
-    //add score
-    const scoreDiv = document.createElement("div");
+    // add score
+    const scoreDiv = document.createElement("div"); // Create a new div element for the score
     scoreDiv.innerHTML = `<strong>Score:</strong> ${score}`;
+    // Add the scoreDiv to the patternsCon div
     patternsCon.appendChild(scoreDiv);
+
+    // more details line
+    const moreDetails = document.createElement("div");
+    moreDetails.innerHTML = "Look at the command line for more details!";
+    patternsCon.appendChild(moreDetails);
 }
