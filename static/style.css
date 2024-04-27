@@ -1,0 +1,13 @@
+/* css sheet for the web app*/
+
+#table {
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+#table td {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 18px;
+}

@@ -22,7 +22,7 @@ def sole_technique(grid):
                         numbers.append(x)
                 # if sole candidate flag that cell
                 if len(numbers)==1:
-                    print("sole candidate\n")
+                    print("sole candidate at:",i,j,"for number:",x)
                     sole_candidate.append((i,j,x))
     #print(sole_candidate)
     return sole_candidate

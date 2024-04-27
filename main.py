@@ -3,7 +3,7 @@ from puzzle_generator import *
 from grader import *
 
 if __name__ == "__main__":
-    #grid = Generate_puzzle()
+    grid = Generate_puzzle()
     grid = [
     [0, 2, 0, 1, 0, 0, 0, 0, 0],
     [0, 0, 6, 0, 0, 0, 0, 0, 0],
